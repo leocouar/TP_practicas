@@ -35,5 +35,20 @@ services:
       - ./backend:/usr/src/app
     command: npm run start
 
+
+  userfront:
+    container_name: "userfront"
+    restart: always
+    build:
+      context: ./userfront
+      dockerfile: Dockerfile
+    ports:
+      - "${NESTJS_API_PORT}:${NESTJS_API_PORT}"
+    depends_on:
+      - backend
+    volumes:
+      - ./userfront:/usr/src/app
+    command: npm run start
+
 volumes:
   postgres-db_data:
