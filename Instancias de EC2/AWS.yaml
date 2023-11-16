@@ -1,0 +1,31 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Stack for creating an EC2 instance with Node.js and security group rules
+
+Resources:
+  EC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.micro  # Puedes cambiar el tipo de instancia según tus necesidades
+      ImageId: ami-xxxxxxxxxxxxx  # ID de la imagen de Amazon Machine (AMI) de Node.js
+      KeyName: YourKeyPair  # Reemplaza con el nombre de tu par de claves
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          yum update -y
+          yum install -y nodejs npm
+          # Aquí puedes agregar comandos adicionales para configurar tu aplicación Node.js
+
+  SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for EC2 instance
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0  # Abre el puerto 80 para acceso público, ajústalo según tus necesidades
+
+Outputs:
+  PublicIPAddress:
+    Description: Public IP address of the EC2 instance
+    Value: !GetAtt EC2Instance.PublicIp

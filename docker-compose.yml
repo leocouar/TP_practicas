@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  postgres-db:
+    container_name: "postgres-db"
+    image: postgres:15
+    restart: always
+    ports:
+      - "${DB_PORT}:5432"
+    environment:
+      - DATABASE_HOST=${DB_HOST}
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_DATABASE}
+    volumes:
+      - postgres-db_data:/var/lib/postgresql/data
+
+  backend:
+    container_name: "backend"
+    restart: always
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      - DB_HOST=postgres-db
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_DATABASE=${DB_DATABASE}
+      - NESTJS_API_PORT=${NESTJS_API_PORT}
+    ports:
+      - "${NESTJS_API_PORT}:${NESTJS_API_PORT}"
+    depends_on:
+      - postgres-db
+    volumes:
+      - ./backend:/usr/src/app
+    command: npm run start
+
+volumes:
+  postgres-db_data:
