@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export async function save(user) {
-    const fetchUrl = `${process.env.BACKEND_SERVICE}/api/user`;
+    const fetchUrl = `${process.env.BACKEND_SERVICE}/api/users`;
 
     try {
         let response = await axios.post(fetchUrl, user);
@@ -12,7 +12,7 @@ export async function save(user) {
 }
 
 export async function update(user) {
-    const fetchUrl = `${process.env.BACKEND_SERVICE}/api/user`;
+    const fetchUrl = `${process.env.BACKEND_SERVICE}/api/users`;
 
     try {
         let response = await axios.patch(fetchUrl, user);
@@ -23,12 +23,11 @@ export async function update(user) {
 }
 
 export async function findAll() {
-    const fetchUrl = `${process.env.BACKEND_SERVICE}/api/users`;
+    const fetchUrl = `http://localhost:3300/api/users`;
 
     try {
         let response = await axios.get(fetchUrl);
         return response.data;
-        console.log(response.data);
     } catch (error) {
         throw new Error("Could not get all users !");
     }

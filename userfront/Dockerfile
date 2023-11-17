@@ -1,15 +1,20 @@
-# Base image
+# Usa una imagen base de Node.js con la versión que necesites
 FROM node:18
 
-# Create app directory
+# Establece el directorio de trabajo en la aplicación
 WORKDIR /usr/src/app
 
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-COPY package*.json ./
-# Install app dependencies
-RUN npm install
-
-# Bundle app source
+# Copia los archivos del proyecto al directorio de trabajo
 COPY . .
 
-CMD ["npm", "run", "dev"]
+# Instala las dependencias del proyecto
+RUN npm install
+
+# Construye la aplicación Next.js
+RUN npm run build
+
+# Expone el puerto en el que la aplicación se ejecutará (ajusta según sea necesario)
+EXPOSE 3000
+
+# Comando para iniciar la aplicación
+CMD ["npm", "run", "start"]

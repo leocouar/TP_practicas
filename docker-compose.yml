@@ -35,19 +35,18 @@ services:
       - ./backend:/usr/src/app
     command: npm run start
 
-
   userfront:
     container_name: "userfront"
     restart: always
     build:
       context: ./userfront
       dockerfile: Dockerfile
+    environment:
+      - BACKEND_SERVICE=http://backend:${NESTJS_API_PORT}  # Corregido: Sin espacios alrededor del signo "="
     ports:
-      - "${NESTJS_API_PORT}:${NESTJS_API_PORT}"
-    depends_on:
-      - backend
-    volumes:
-      - ./userfront:/usr/src/app
+      - "3000:3000"
+    # depends_on:
+    #   - backend
     command: npm run start
 
 volumes:
